@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/news', );
+Route::get('/news', [NewsController::class, 'index']);
+Route::get('/news/{id}', [NewsController::class, 'show']);
+Route::group(
+    [
+        'prefix' => 'admin',
+        'middleware' => ['admin']
+    ],
+    function () {
+        Route::get('/news', [AdminNewsController::class, 'index']);
+        Route::get('/news/{id}', [AdminNewsController::class, 'show']);
+        Route::post('/news', [AdminNewsController::class, 'create']);
+        Route::patch('/news/{id}', [AdminNewsController::class, 'update']);
+    }
+);
